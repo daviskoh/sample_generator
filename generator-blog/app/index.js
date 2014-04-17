@@ -13,7 +13,7 @@ var BlogGenerator = yeoman.generators.Base.extend({
     // listen for end event (when methods defined below are done executing)
     this.on('end', function () {
       if (!this.options['skip-install']) {
-        this.installDependencies();
+        this.installDependencies(); // bower & npm dependencies
       }
     });
   },
@@ -30,12 +30,6 @@ var BlogGenerator = yeoman.generators.Base.extend({
 
     // list of prompts to be asked to user
     var prompts = [
-      {
-        type: 'confirm',
-        name: 'someOption',
-        message: 'Would you like to enable this option?',
-        default: true
-      },
       {
         name: 'blogName',
         message: 'What do you want to call your blog?'
@@ -54,13 +48,31 @@ var BlogGenerator = yeoman.generators.Base.extend({
   },
 
   app: function () {
+    // use '_' to indicate Lo-Dash will be used to process them
+
     // mkdir in current directory
     this.mkdir('posts');
 
-    // place files (from templates dir) into project's root dir
-    // this.copy('old name', 'new name')
-    this.copy('_package.json', 'package.json');
-    this.copy('_bower.json', 'bower.json');
+    this.template('_index.md', 'posts/index.md');
+
+    this.template('Gruntfile.js', 'Gruntfile.js');
+    this.template('index.html', 'index.html');
+
+    // this.method('old name', 'new name')
+
+    // run Lo-Dash through file in 1st param and place compiled result at 2nd param
+    // allows for dynamically generated content (look inside files for ex)
+    this.template('_bower.json', 'bower.json');
+    this.template('_config.json', 'config.json');
+    this.template('_package.json', 'package.json');
+
+    // copy files (from templates dir) into project's root dir
+    this.copy('wordmap.json', 'wordmap.json');
+  },
+
+  runtime: function() {
+    this.copy('bowerrc', '.bowerrc');
+    this.copy('gitignore', '.gitignore');
   },
 
   projectfiles: function () {
