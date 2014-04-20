@@ -24,9 +24,7 @@ In your Command Line run:
 
 in order to scaffold generator-name
 
-	yo generator-name
-
-and in order to use sub-generators
+and in order to use sub-generators:
 
 	yo name:subgenerator-name
 
